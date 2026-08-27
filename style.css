@@ -52,8 +52,7 @@ body {
     display: block;
     cursor: pointer;
 
-    transition:
-        opacity 0.2s ease;
+    transition: none;
 }
 
 .logo-container img:hover {
@@ -64,9 +63,9 @@ body {
 /* Logo disappears when entering Page 2 */
 
 .logo-container img.hide {
-    transform: scale(0);
+    opacity: 0;
+    transform: none;
 }
-
 
 /* ========================================
    SCREEN 2 — PARENT COMPANY

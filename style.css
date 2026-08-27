@@ -101,8 +101,17 @@ body {
    COMPANY LOGOS
 ======================================== */
 
-.child-company {
+.companies {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 60px;
     margin-top: 40px;
+}
+
+.child-company {
+    margin-top: 0;
 }
 
 .company-logo {

@@ -59,6 +59,7 @@ body {
     opacity: 0.85;
 }
 
+
 /* ========================================
    SCREEN 2 — PARENT COMPANY
 ======================================== */
@@ -70,31 +71,29 @@ body {
     height: 100vh;
 
     background: #ffffff;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-
-    padding-top: 50px;
-    padding-bottom: 80px;
 }
 
 
 /* ========================================
-   MANYORIGIN WORDMARK
+   MANYORIGIN WORDMARK — PAGE 2
 ======================================== */
 
 .parent-wordmark {
-    position: static;
-    transform: none;
+    position: absolute;
 
-    flex-shrink: 0;
+    top: 60px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    display: flex;
+    justify-content: center;
 }
 
 .parent-wordmark img {
-    width: 140px;
+    width: 200px;
     height: auto;
+
     display: block;
 }
 
@@ -104,18 +103,16 @@ body {
 ======================================== */
 
 .parent-content {
-    position: static;
-    transform: none;
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
 
     width: 100%;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     text-align: center;
-
-    flex-shrink: 0;
 }
 
 .parent-content h2 {
@@ -132,13 +129,18 @@ body {
 ======================================== */
 
 .companies {
+    position: absolute;
+
+    bottom: 80px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
     display: flex;
     align-items: center;
     justify-content: center;
 
     gap: 60px;
-
-    flex-shrink: 0;
 }
 
 .child-company {
@@ -163,6 +165,7 @@ body {
 .company-logo:active {
     transform: scale(0.94);
 }
+
 
 /* ========================================
    PAGE CONTROLS
@@ -302,6 +305,11 @@ body {
     pointer-events: auto;
 }
 
+
+/* ========================================
+   REMOVE FOCUS / TAP HIGHLIGHT
+======================================== */
+
 *,
 *::before,
 *::after {
@@ -326,25 +334,4 @@ body {
     outline: none !important;
     box-shadow: none !important;
     -webkit-tap-highlight-color: transparent;
-}
-
-
-
-/* ========================================
-   MANYORIGIN WORDMARK — PAGE 2
-======================================== */
-
-.parent-wordmark {
-    position: absolute;
-
-    top: 60px;
-    left: 50%;
-
-    transform: translateX(-50%);
-}
-
-.parent-wordmark img {
-    width: 200px;
-    height: auto;
-    display: block;
 }

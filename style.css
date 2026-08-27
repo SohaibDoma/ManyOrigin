@@ -298,3 +298,22 @@ body {
     box-shadow: none !important;
     -webkit-tap-highlight-color: transparent;
 }
+
+
+
+/* ========================================
+   MANYORIGIN WORDMARK — PAGE 2
+======================================== */
+
+.parent-wordmark {
+    position: absolute;
+
+    top: 30px;
+    left: 30px;
+}
+
+.parent-wordmark img {
+    width: 140px;
+    height: auto;
+    display: block;
+}

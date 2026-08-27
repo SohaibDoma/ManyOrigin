@@ -143,6 +143,7 @@
 
     let touchStartY = 0;
     let touchStartX = 0;
+    let touchTriggered = false;
 
 
     // ========================================
@@ -190,6 +191,7 @@
             transitioning = false;
 
         }, 700);
+
     }
 
 
@@ -238,6 +240,7 @@
             transitioning = false;
 
         }, 700);
+
     }
 
 
@@ -317,7 +320,7 @@
             }
 
 
-            // Block everything else
+            // Block all other scrolling
 
             event.preventDefault();
 
@@ -336,11 +339,14 @@
 
             if (transitioning) return;
 
+
             touchStartY =
                 event.touches[0].clientY;
 
             touchStartX =
                 event.touches[0].clientX;
+
+            touchTriggered = false;
 
         },
         { passive: true }
@@ -355,56 +361,51 @@
         "touchmove",
         function (event) {
 
-            if (transitioning) {
+            if (transitioning || touchTriggered) {
+
                 event.preventDefault();
+
                 return;
             }
 
-            event.preventDefault();
 
-        },
-        { passive: false }
-    );
+            const currentY =
+                event.touches[0].clientY;
 
-
-    // ========================================
-    // MOBILE — TOUCH END
-    // ========================================
-
-    window.addEventListener(
-        "touchend",
-        function (event) {
-
-            if (transitioning) return;
-
-
-            const touchEndY =
-                event.changedTouches[0].clientY;
-
-            const touchEndX =
-                event.changedTouches[0].clientX;
+            const currentX =
+                event.touches[0].clientX;
 
 
             const deltaY =
-                touchStartY - touchEndY;
+                touchStartY - currentY;
 
             const deltaX =
-                touchStartX - touchEndX;
+                touchStartX - currentX;
 
 
-            // Ignore mostly horizontal swipes
+            // Ignore horizontal gestures
 
             if (
                 Math.abs(deltaX) >
                 Math.abs(deltaY)
             ) {
+
                 return;
+
             }
 
 
-            // Minimum swipe distance
+            // Keep the browser from
+            // performing normal scrolling
 
-            const swipeDistance = 50;
+            event.preventDefault();
+
+
+            // ====================================
+            // SENSITIVE SWIPE DISTANCE
+            // ====================================
+
+            const swipeDistance = 25;
 
 
             // ====================================
@@ -417,9 +418,12 @@
                 !pageTwoActive
             ) {
 
+                touchTriggered = true;
+
                 enterPageTwo();
 
                 return;
+
             }
 
 
@@ -433,10 +437,28 @@
                 pageTwoActive
             ) {
 
+                touchTriggered = true;
+
                 returnToPageOne();
 
                 return;
+
             }
+
+        },
+        { passive: false }
+    );
+
+
+    // ========================================
+    // MOBILE — TOUCH END
+    // ========================================
+
+    window.addEventListener(
+        "touchend",
+        function () {
+
+            touchTriggered = false;
 
         },
         { passive: true }

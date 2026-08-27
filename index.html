@@ -264,6 +264,38 @@
 
 
     // ========================================
+    // SAFARI — IMMEDIATE BUTTON TOUCH
+    // ========================================
+
+    infoButton.addEventListener(
+        "touchend",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            enterPageTwo();
+
+        },
+        { passive: false }
+    );
+
+
+    closeButton.addEventListener(
+        "touchend",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            returnToPageOne();
+
+        },
+        { passive: false }
+    );
+
+
+    // ========================================
     // DESKTOP WHEEL
     // ========================================
 

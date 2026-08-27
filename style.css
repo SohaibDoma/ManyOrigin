@@ -315,14 +315,14 @@ body {
 .parent-wordmark {
     position: absolute;
 
-    top: 50px;
+    top: 60px;
     left: 50%;
 
     transform: translateX(-50%);
 }
 
 .parent-wordmark img {
-    width: 300px;
+    width: 200px;
     height: auto;
     display: block;
 }

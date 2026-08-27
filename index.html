@@ -139,7 +139,6 @@
 
 
     let pageTwoActive = false;
-    let transitioning = false;
 
     let touchStartY = 0;
     let touchStartX = 0;
@@ -157,44 +156,36 @@
             event.stopPropagation();
         }
 
-        // Only prevent repeated Page 2 activation
+
+        // Already on Page 2
+
         if (pageTwoActive) return;
 
 
         pageTwoActive = true;
-        transitioning = true;
 
 
-        // ? disappears
+        // ? disappears immediately
 
         infoButton.classList.add("hide");
 
 
-        // ManyOrigin logo disappears
+        // ManyOrigin logo disappears immediately
 
         manyOriginLogo.classList.add("hide");
 
 
-        // X appears
+        // X appears immediately
 
         closeButton.classList.add("show");
 
 
-        // Full page scroll
+        // Move to Page 2
 
         window.scrollTo({
             top: window.innerHeight,
             behavior: "smooth"
         });
-
-
-        // Scroll protection ends after animation
-
-        setTimeout(() => {
-
-            transitioning = false;
-
-        }, 700);
 
     }
 
@@ -210,44 +201,36 @@
             event.stopPropagation();
         }
 
-        // Only prevent repeated Page 1 activation
+
+        // Already on Page 1
+
         if (!pageTwoActive) return;
 
 
         pageTwoActive = false;
-        transitioning = true;
 
 
-        // X disappears
+        // X disappears immediately
 
         closeButton.classList.remove("show");
 
 
-        // ? appears
+        // ? appears immediately
 
         infoButton.classList.remove("hide");
 
 
-        // ManyOrigin logo appears
+        // ManyOrigin logo appears immediately
 
         manyOriginLogo.classList.remove("hide");
 
 
-        // Full page scroll back
+        // Move to Page 1
 
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         });
-
-
-        // Scroll protection ends after animation
-
-        setTimeout(() => {
-
-            transitioning = false;
-
-        }, 700);
 
     }
 
@@ -266,7 +249,7 @@
 
     // ========================================
     // ? BUTTON
-    // ALWAYS CLICKABLE
+    // ALWAYS ACTIVE
     // ========================================
 
     infoButton.addEventListener(
@@ -277,7 +260,7 @@
 
     // ========================================
     // X BUTTON
-    // ALWAYS CLICKABLE
+    // ALWAYS ACTIVE
     // ========================================
 
     closeButton.addEventListener(
@@ -288,53 +271,42 @@
 
     // ========================================
     // DESKTOP — FULL PAGE SCROLL
+    // ALWAYS ACTIVE
     // ========================================
 
     window.addEventListener(
         "wheel",
         function (event) {
 
-            // Scroll is protected during transition
-
-            if (transitioning) {
-                event.preventDefault();
-                return;
-            }
-
-
-            // Page 1 → Page 2
-
-            if (
-                !pageTwoActive &&
-                event.deltaY > 0
-            ) {
-
-                event.preventDefault();
-
-                enterPageTwo();
-
-                return;
-            }
-
-
-            // Page 2 → Page 1
-
-            if (
-                pageTwoActive &&
-                event.deltaY < 0
-            ) {
-
-                event.preventDefault();
-
-                returnToPageOne();
-
-                return;
-            }
-
-
-            // Block all other scrolling
-
             event.preventDefault();
+
+
+            // Scroll DOWN → Page 2
+
+            if (event.deltaY > 0) {
+
+                if (!pageTwoActive) {
+
+                    enterPageTwo();
+
+                }
+
+                return;
+            }
+
+
+            // Scroll UP → Page 1
+
+            if (event.deltaY < 0) {
+
+                if (pageTwoActive) {
+
+                    returnToPageOne();
+
+                }
+
+                return;
+            }
 
         },
         { passive: false }
@@ -343,14 +315,12 @@
 
     // ========================================
     // MOBILE — TOUCH START
+    // ALWAYS ACTIVE
     // ========================================
 
     window.addEventListener(
         "touchstart",
         function (event) {
-
-            if (transitioning) return;
-
 
             touchStartY =
                 event.touches[0].clientY;
@@ -367,18 +337,17 @@
 
     // ========================================
     // MOBILE — TOUCH MOVE
+    // ALWAYS ACTIVE
     // ========================================
 
     window.addEventListener(
         "touchmove",
         function (event) {
 
-            if (transitioning || touchTriggered) {
+            event.preventDefault();
 
-                event.preventDefault();
 
-                return;
-            }
+            if (touchTriggered) return;
 
 
             const currentY =
@@ -405,17 +374,13 @@
             }
 
 
-            event.preventDefault();
-
-
-            // Sensitive swipe distance
+            // Very sensitive
 
             const swipeDistance = 25;
 
 
             // ====================================
-            // SWIPE UP
-            // Page 1 → Page 2
+            // SWIPE UP → PAGE 2
             // ====================================
 
             if (
@@ -432,8 +397,7 @@
 
 
             // ====================================
-            // SWIPE DOWN
-            // Page 2 → Page 1
+            // SWIPE DOWN → PAGE 1
             // ====================================
 
             if (
@@ -476,34 +440,30 @@
         "scroll",
         function () {
 
-            if (transitioning) return;
-
-
             const pageHeight =
                 window.innerHeight;
 
 
             // Page 1
 
-            if (
-                !pageTwoActive &&
-                window.scrollY !== 0
-            ) {
+            if (!pageTwoActive) {
 
-                window.scrollTo({
-                    top: 0,
-                    behavior: "auto"
-                });
+                if (window.scrollY !== 0) {
 
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "auto"
+                    });
+
+                }
+
+                return;
             }
 
 
             // Page 2
 
-            if (
-                pageTwoActive &&
-                window.scrollY !== pageHeight
-            ) {
+            if (window.scrollY !== pageHeight) {
 
                 window.scrollTo({
                     top: pageHeight,

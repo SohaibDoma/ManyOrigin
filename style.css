@@ -105,7 +105,7 @@ body {
 .companies {
     position: absolute;
 
-    top: 90%;
+    top: 80%;
     left: 50%;
 
     transform: translateX(-50%);
@@ -315,7 +315,7 @@ body {
 .parent-wordmark {
     position: absolute;
 
-    top: 30px;
+    top: 50px;
     left: 50%;
 
     transform: translateX(-50%);

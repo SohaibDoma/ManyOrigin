@@ -144,72 +144,17 @@
     let touchStartX = 0;
     let touchTriggered = false;
 
-    let scrollAnimation = null;
-
 
     // ========================================
-    // INTERRUPTIBLE PAGE SCROLL
+    // PAGE SCROLL
     // ========================================
 
     function moveToPage(target) {
 
-        if (scrollAnimation) {
-            cancelAnimationFrame(scrollAnimation);
-            scrollAnimation = null;
-        }
-
-
-        const start = window.scrollY;
-        const distance = target - start;
-
-        const duration = 350;
-        const startTime = performance.now();
-
-
-        function animate(currentTime) {
-
-            const elapsed =
-                currentTime - startTime;
-
-            const progress =
-                Math.min(elapsed / duration, 1);
-
-
-            // Smooth ease-in-out
-
-            const eased =
-                progress < 0.5
-                    ? 2 * progress * progress
-                    : 1 - Math.pow(
-                        -2 * progress + 2,
-                        2
-                    ) / 2;
-
-
-            window.scrollTo(
-                0,
-                start + distance * eased
-            );
-
-
-            if (progress < 1) {
-
-                scrollAnimation =
-                    requestAnimationFrame(
-                        animate
-                    );
-
-            } else {
-
-                scrollAnimation = null;
-
-            }
-
-        }
-
-
-        scrollAnimation =
-            requestAnimationFrame(animate);
+        window.scrollTo({
+            top: target,
+            behavior: "smooth"
+        });
 
     }
 
@@ -323,38 +268,6 @@
     closeButton.addEventListener(
         "click",
         returnToPageOne
-    );
-
-
-    // ========================================
-    // SAFARI — IMMEDIATE BUTTON TOUCH
-    // ========================================
-
-    infoButton.addEventListener(
-        "touchend",
-        function (event) {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            enterPageTwo();
-
-        },
-        { passive: false }
-    );
-
-
-    closeButton.addEventListener(
-        "touchend",
-        function (event) {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            returnToPageOne();
-
-        },
-        { passive: false }
     );
 
 

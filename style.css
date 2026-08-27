@@ -59,14 +59,6 @@ body {
     opacity: 0.85;
 }
 
-
-/* Logo disappears when entering Page 2 */
-
-.logo-container img.hide {
-    opacity: 0;
-    transform: none;
-}
-
 /* ========================================
    SCREEN 2 — PARENT COMPANY
 ======================================== */

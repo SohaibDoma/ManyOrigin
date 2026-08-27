@@ -157,10 +157,12 @@
             event.stopPropagation();
         }
 
-        if (transitioning || pageTwoActive) return;
+        // Only prevent repeated Page 2 activation
+        if (pageTwoActive) return;
 
-        transitioning = true;
+
         pageTwoActive = true;
+        transitioning = true;
 
 
         // ? disappears
@@ -186,6 +188,8 @@
         });
 
 
+        // Scroll protection ends after animation
+
         setTimeout(() => {
 
             transitioning = false;
@@ -206,10 +210,12 @@
             event.stopPropagation();
         }
 
-        if (transitioning || !pageTwoActive) return;
+        // Only prevent repeated Page 1 activation
+        if (!pageTwoActive) return;
 
-        transitioning = true;
+
         pageTwoActive = false;
+        transitioning = true;
 
 
         // X disappears
@@ -235,6 +241,8 @@
         });
 
 
+        // Scroll protection ends after animation
+
         setTimeout(() => {
 
             transitioning = false;
@@ -258,6 +266,7 @@
 
     // ========================================
     // ? BUTTON
+    // ALWAYS CLICKABLE
     // ========================================
 
     infoButton.addEventListener(
@@ -268,6 +277,7 @@
 
     // ========================================
     // X BUTTON
+    // ALWAYS CLICKABLE
     // ========================================
 
     closeButton.addEventListener(
@@ -283,6 +293,8 @@
     window.addEventListener(
         "wheel",
         function (event) {
+
+            // Scroll is protected during transition
 
             if (transitioning) {
                 event.preventDefault();
@@ -389,21 +401,14 @@
                 Math.abs(deltaX) >
                 Math.abs(deltaY)
             ) {
-
                 return;
-
             }
 
-
-            // Keep the browser from
-            // performing normal scrolling
 
             event.preventDefault();
 
 
-            // ====================================
-            // SENSITIVE SWIPE DISTANCE
-            // ====================================
+            // Sensitive swipe distance
 
             const swipeDistance = 25;
 
@@ -423,7 +428,6 @@
                 enterPageTwo();
 
                 return;
-
             }
 
 
@@ -442,7 +446,6 @@
                 returnToPageOne();
 
                 return;
-
             }
 
         },

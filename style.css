@@ -274,3 +274,9 @@ body {
     opacity: 1;
     pointer-events: auto;
 }
+
+*:focus,
+*:focus-visible {
+    outline: none;
+    box-shadow: none;
+}

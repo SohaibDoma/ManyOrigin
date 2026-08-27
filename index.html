@@ -157,30 +157,28 @@
         }
 
 
-        // Already on Page 2
-
         if (pageTwoActive) return;
 
 
         pageTwoActive = true;
 
 
-        // ? disappears immediately
+        // ? disappears
 
         infoButton.classList.add("hide");
 
 
-        // ManyOrigin logo disappears immediately
+        // ManyOrigin logo disappears
 
         manyOriginLogo.classList.add("hide");
 
 
-        // X appears immediately
+        // X appears
 
         closeButton.classList.add("show");
 
 
-        // Move to Page 2
+        // Full page movement
 
         window.scrollTo({
             top: window.innerHeight,
@@ -202,30 +200,28 @@
         }
 
 
-        // Already on Page 1
-
         if (!pageTwoActive) return;
 
 
         pageTwoActive = false;
 
 
-        // X disappears immediately
+        // X disappears
 
         closeButton.classList.remove("show");
 
 
-        // ? appears immediately
+        // ? appears
 
         infoButton.classList.remove("hide");
 
 
-        // ManyOrigin logo appears immediately
+        // ManyOrigin logo appears
 
         manyOriginLogo.classList.remove("hide");
 
 
-        // Move to Page 1
+        // Full page movement
 
         window.scrollTo({
             top: 0,
@@ -249,7 +245,6 @@
 
     // ========================================
     // ? BUTTON
-    // ALWAYS ACTIVE
     // ========================================
 
     infoButton.addEventListener(
@@ -260,7 +255,6 @@
 
     // ========================================
     // X BUTTON
-    // ALWAYS ACTIVE
     // ========================================
 
     closeButton.addEventListener(
@@ -270,8 +264,7 @@
 
 
     // ========================================
-    // DESKTOP — FULL PAGE SCROLL
-    // ALWAYS ACTIVE
+    // DESKTOP WHEEL
     // ========================================
 
     window.addEventListener(
@@ -281,29 +274,23 @@
             event.preventDefault();
 
 
-            // Scroll DOWN → Page 2
+            if (
+                event.deltaY > 0 &&
+                !pageTwoActive
+            ) {
 
-            if (event.deltaY > 0) {
-
-                if (!pageTwoActive) {
-
-                    enterPageTwo();
-
-                }
+                enterPageTwo();
 
                 return;
             }
 
 
-            // Scroll UP → Page 1
+            if (
+                event.deltaY < 0 &&
+                pageTwoActive
+            ) {
 
-            if (event.deltaY < 0) {
-
-                if (pageTwoActive) {
-
-                    returnToPageOne();
-
-                }
+                returnToPageOne();
 
                 return;
             }
@@ -314,8 +301,7 @@
 
 
     // ========================================
-    // MOBILE — TOUCH START
-    // ALWAYS ACTIVE
+    // MOBILE TOUCH START
     // ========================================
 
     window.addEventListener(
@@ -336,19 +322,12 @@
 
 
     // ========================================
-    // MOBILE — TOUCH MOVE
-    // ALWAYS ACTIVE
+    // MOBILE TOUCH MOVE
     // ========================================
 
     window.addEventListener(
         "touchmove",
         function (event) {
-
-            event.preventDefault();
-
-
-            if (touchTriggered) return;
-
 
             const currentY =
                 event.touches[0].clientY;
@@ -364,23 +343,35 @@
                 touchStartX - currentX;
 
 
-            // Ignore horizontal gestures
+            // Ignore horizontal movement
 
             if (
                 Math.abs(deltaX) >
                 Math.abs(deltaY)
             ) {
+
                 return;
+
             }
 
 
-            // Very sensitive
+            // Prevent native page scrolling
 
-            const swipeDistance = 25;
+            event.preventDefault();
+
+
+            if (touchTriggered) return;
 
 
             // ====================================
-            // SWIPE UP → PAGE 2
+            // SWIPE SENSITIVITY
+            // ====================================
+
+            const swipeDistance = 35;
+
+
+            // ====================================
+            // SWIPE UP
             // ====================================
 
             if (
@@ -397,7 +388,7 @@
 
 
             // ====================================
-            // SWIPE DOWN → PAGE 1
+            // SWIPE DOWN
             // ====================================
 
             if (
@@ -418,7 +409,7 @@
 
 
     // ========================================
-    // MOBILE — TOUCH END
+    // MOBILE TOUCH END
     // ========================================
 
     window.addEventListener(
@@ -429,50 +420,6 @@
 
         },
         { passive: true }
-    );
-
-
-    // ========================================
-    // KEEP EXACTLY AT PAGE POSITIONS
-    // ========================================
-
-    window.addEventListener(
-        "scroll",
-        function () {
-
-            const pageHeight =
-                window.innerHeight;
-
-
-            // Page 1
-
-            if (!pageTwoActive) {
-
-                if (window.scrollY !== 0) {
-
-                    window.scrollTo({
-                        top: 0,
-                        behavior: "auto"
-                    });
-
-                }
-
-                return;
-            }
-
-
-            // Page 2
-
-            if (window.scrollY !== pageHeight) {
-
-                window.scrollTo({
-                    top: pageHeight,
-                    behavior: "auto"
-                });
-
-            }
-
-        }
     );
 
 </script>

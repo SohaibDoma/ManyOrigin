@@ -175,7 +175,15 @@ body {
         opacity 0.2s ease;
 }
 
-/* ? disappears exactly like ManyOrigin logo */
+
+/* ? hover */
+
+.info-button:hover {
+    opacity: 0.65;
+}
+
+
+/* ? disappears */
 
 .info-button.hide {
     transform: scale(0);
@@ -184,42 +192,11 @@ body {
 
 
 /* ========================================
-   × — PAGE 2 ELEMENT
+   × — FIXED VIEWPORT CONTROL
 ======================================== */
 
 .close-button {
-    position: absolute;
-
-    top: 30px;
-    right: 30px;
-
-    width: 32px;
-    height: 32px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-
-    transform: scale(0);
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition:
-        transform 0.45s ease,
-        opacity 0.2s ease;
-}
-
-
-/* ========================================
-   × — PAGE 2 ELEMENT
-======================================== */
-
-.close-button {
-    position: absolute;
+    position: fixed;
 
     top: 30px;
     right: 30px;
@@ -241,6 +218,8 @@ body {
     transition:
         transform 0.45s ease,
         opacity 0.2s ease;
+
+    z-index: 1001;
 }
 
 
@@ -271,15 +250,16 @@ body {
 
 
 /* ========================================
-   HOVER
+   X HOVER — IDENTICAL TO ?
 ======================================== */
 
-.info-button:hover,
 .close-button.show:hover {
     opacity: 0.65;
 }
+
+
 /* ========================================
-   PRESS
+   X PRESS
 ======================================== */
 
 .close-button:active {
@@ -288,7 +268,7 @@ body {
 
 
 /* ========================================
-   X APPEARS ON PAGE 2
+   X APPEARS
 ======================================== */
 
 .close-button.show {

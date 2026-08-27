@@ -23,21 +23,43 @@
 
 
     <!-- ========================================
-         SCREEN 1
+         FIXED PAGE CONTROL
     ======================================== -->
 
-    <section class="hero" id="hero">
+    <div class="page-control">
 
         <!-- Question Mark -->
 
         <a href="#parent-company"
            class="info-button"
-           id="info-button">
+           id="info-button"
+           aria-label="Enter">
+
             ?
+
         </a>
 
 
-        <!-- ManyOrigin Logo -->
+        <!-- X -->
+
+        <a href="#hero"
+           class="close-button"
+           id="close-button"
+           aria-label="Close">
+
+            <span></span>
+            <span></span>
+
+        </a>
+
+    </div>
+
+
+    <!-- ========================================
+         SCREEN 1
+    ======================================== -->
+
+    <section class="hero" id="hero">
 
         <div class="logo-container">
 
@@ -60,19 +82,6 @@
     ======================================== -->
 
     <section class="parent-company" id="parent-company">
-
-        <!-- X belongs to Page 2 -->
-
-        <a href="#hero"
-           class="close-button"
-           id="close-button"
-           aria-label="Close">
-
-            <span></span>
-            <span></span>
-
-        </a>
-
 
         <div class="parent-content">
 
@@ -119,11 +128,11 @@
 
 <script>
 
-    const hero =
-        document.querySelector(".hero");
-
     const manyOriginLogo =
         document.querySelector(".logo-container img");
+
+    const enterManyOrigin =
+        document.getElementById("enter-manyorigin");
 
     const infoButton =
         document.getElementById("info-button");
@@ -159,13 +168,17 @@
         pageTwoActive = true;
 
 
-        // Page 1 elements disappear together
+        // ManyOrigin logo disappears
 
         manyOriginLogo.classList.add("hide");
+
+
+        // ? disappears
+
         infoButton.classList.add("hide");
 
 
-        // Page 2 X appears
+        // X appears
 
         closeButton.classList.add("show");
 
@@ -184,9 +197,16 @@
                 behavior: "smooth"
             });
 
+        }, 300);
+
+
+        // Allow interaction again
+
+        setTimeout(() => {
+
             transitioning = false;
 
-        }, 300);
+        }, 750);
 
     }
 
@@ -195,14 +215,15 @@
     // MANYORIGIN LOGO
     // ========================================
 
-    document
-        .getElementById("enter-manyorigin")
-        .addEventListener("click", enterPageTwo);
+    enterManyOrigin.addEventListener(
+        "click",
+        enterPageTwo
+    );
 
 
     // ========================================
     // QUESTION MARK
-    // Behaves exactly like the logo
+    // EXACTLY THE SAME ACTION AS LOGO
     // ========================================
 
     infoButton.addEventListener(
@@ -212,71 +233,63 @@
 
 
     // ========================================
+    // RETURN TO PAGE 1
+    // ========================================
+
+    function returnToPageOne(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (transitioning || !pageTwoActive) return;
+
+
+        transitioning = true;
+        pageTwoActive = false;
+
+
+        // X disappears
+
+        closeButton.classList.remove("show");
+
+
+        // ? appears
+
+        infoButton.classList.remove("hide");
+
+
+        // ManyOrigin logo appears
+
+        manyOriginLogo.classList.remove("hide");
+
+
+        // Scroll back to Page 1
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+
+        // Lock Page 1 after transition
+
+        setTimeout(() => {
+
+            document.body.style.overflow = "hidden";
+            transitioning = false;
+
+        }, 700);
+
+    }
+
+
+    // ========================================
     // X BUTTON
-    // Behaves exactly like scrolling up
     // ========================================
 
     closeButton.addEventListener(
         "click",
-        function (event) {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            if (
-                transitioning ||
-                !pageTwoActive
-            ) return;
-
-
-            transitioning = true;
-            pageTwoActive = false;
-
-
-            // Return to Page 1
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-
-            // Wait for Page 1 to settle
-
-            setTimeout(() => {
-
-                // X disappears
-
-                closeButton.classList.remove(
-                    "show"
-                );
-
-
-                // Page 1 elements return
-
-                manyOriginLogo.classList.remove(
-                    "hide"
-                );
-
-                infoButton.classList.remove(
-                    "hide"
-                );
-
-            }, 450);
-
-
-            // Lock Page 1 again
-
-            setTimeout(() => {
-
-                document.body.style.overflow =
-                    "hidden";
-
-                transitioning = false;
-
-            }, 700);
-
-        }
+        returnToPageOne
     );
 
 
@@ -291,7 +304,6 @@
 
             // ====================================
             // PAGE 1
-            // Block normal downward scrolling
             // ====================================
 
             if (
@@ -300,6 +312,7 @@
             ) {
 
                 event.preventDefault();
+
                 return;
 
             }
@@ -307,7 +320,6 @@
 
             // ====================================
             // PAGE 2
-            // One upward scroll returns to Page 1
             // ====================================
 
             if (
@@ -318,53 +330,7 @@
 
                 event.preventDefault();
 
-
-                transitioning = true;
-                pageTwoActive = false;
-
-
-                // Return to Page 1
-
-                window.scrollTo({
-                    top: 0,
-                    behavior: "smooth"
-                });
-
-
-                // Wait for Page 1 to settle
-
-                setTimeout(() => {
-
-                    // X disappears
-
-                    closeButton.classList.remove(
-                        "show"
-                    );
-
-
-                    // Page 1 elements return
-
-                    manyOriginLogo.classList.remove(
-                        "hide"
-                    );
-
-                    infoButton.classList.remove(
-                        "hide"
-                    );
-
-                }, 450);
-
-
-                // Lock Page 1
-
-                setTimeout(() => {
-
-                    document.body.style.overflow =
-                        "hidden";
-
-                    transitioning = false;
-
-                }, 700);
+                returnToPageOne(event);
 
             }
 

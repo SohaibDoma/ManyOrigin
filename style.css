@@ -74,9 +74,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
 
     padding-top: 50px;
-    padding-bottom: 50px;
+    padding-bottom: 80px;
 }
 
 
@@ -86,7 +87,6 @@ body {
 
 .parent-wordmark {
     position: static;
-
     transform: none;
 
     flex-shrink: 0;
@@ -95,29 +95,27 @@ body {
 .parent-wordmark img {
     width: 140px;
     height: auto;
-
     display: block;
 }
 
 
 /* ========================================
-   PAGE 2 CONTENT
+   PARENT COMPANY TEXT
 ======================================== */
 
 .parent-content {
     position: static;
-
     transform: none;
 
     width: 100%;
-
-    flex: 1;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
     text-align: center;
+
+    flex-shrink: 0;
 }
 
 .parent-content h2 {
@@ -165,7 +163,6 @@ body {
 .company-logo:active {
     transform: scale(0.94);
 }
-
 
 /* ========================================
    PAGE CONTROLS

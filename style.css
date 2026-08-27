@@ -79,24 +79,20 @@ body {
 
 .parent-content {
     position: absolute;
-
     top: 50%;
     left: 50%;
-
     transform: translate(-50%, -50%);
-
-    text-align: center;
+    
     width: 100%;
+    text-align: center;
 }
 
 .parent-content h2 {
-    font-size: 26px;
+    margin: 0;
+    font-size: 30px;
     font-weight: 400;
     line-height: 1.5;
-
-    margin: 0;
 }
-
 
 /* ========================================
    COMPANY LOGOS

@@ -141,6 +141,9 @@
     let pageTwoActive = false;
     let transitioning = false;
 
+    let touchStartY = 0;
+    let touchStartX = 0;
+
 
     // ========================================
     // ENTER PAGE 2
@@ -174,7 +177,7 @@
         closeButton.classList.add("show");
 
 
-        // EXACTLY ONE FULL PAGE
+        // Full page scroll
 
         window.scrollTo({
             top: window.innerHeight,
@@ -222,7 +225,7 @@
         manyOriginLogo.classList.remove("hide");
 
 
-        // EXACTLY ONE FULL PAGE BACK
+        // Full page scroll back
 
         window.scrollTo({
             top: 0,
@@ -239,7 +242,7 @@
 
 
     // ========================================
-    // MANYORIGIN LOGO CLICK
+    // MANYORIGIN LOGO
     // ========================================
 
     document
@@ -251,7 +254,7 @@
 
 
     // ========================================
-    // ? CLICK
+    // ? BUTTON
     // ========================================
 
     infoButton.addEventListener(
@@ -261,7 +264,7 @@
 
 
     // ========================================
-    // X CLICK
+    // X BUTTON
     // ========================================
 
     closeButton.addEventListener(
@@ -271,7 +274,7 @@
 
 
     // ========================================
-    // FULL-PAGE SCROLL CONTROL
+    // DESKTOP — FULL PAGE SCROLL
     // ========================================
 
     window.addEventListener(
@@ -284,9 +287,7 @@
             }
 
 
-            // ====================================
-            // PAGE 1 → PAGE 2
-            // ====================================
+            // Page 1 → Page 2
 
             if (
                 !pageTwoActive &&
@@ -301,9 +302,7 @@
             }
 
 
-            // ====================================
-            // PAGE 2 → PAGE 1
-            // ====================================
+            // Page 2 → Page 1
 
             if (
                 pageTwoActive &&
@@ -318,14 +317,129 @@
             }
 
 
-            // ====================================
-            // BLOCK ALL OTHER SCROLLING
-            // ====================================
+            // Block everything else
 
             event.preventDefault();
 
         },
         { passive: false }
+    );
+
+
+    // ========================================
+    // MOBILE — TOUCH START
+    // ========================================
+
+    window.addEventListener(
+        "touchstart",
+        function (event) {
+
+            if (transitioning) return;
+
+            touchStartY =
+                event.touches[0].clientY;
+
+            touchStartX =
+                event.touches[0].clientX;
+
+        },
+        { passive: true }
+    );
+
+
+    // ========================================
+    // MOBILE — TOUCH MOVE
+    // ========================================
+
+    window.addEventListener(
+        "touchmove",
+        function (event) {
+
+            if (transitioning) {
+                event.preventDefault();
+                return;
+            }
+
+            event.preventDefault();
+
+        },
+        { passive: false }
+    );
+
+
+    // ========================================
+    // MOBILE — TOUCH END
+    // ========================================
+
+    window.addEventListener(
+        "touchend",
+        function (event) {
+
+            if (transitioning) return;
+
+
+            const touchEndY =
+                event.changedTouches[0].clientY;
+
+            const touchEndX =
+                event.changedTouches[0].clientX;
+
+
+            const deltaY =
+                touchStartY - touchEndY;
+
+            const deltaX =
+                touchStartX - touchEndX;
+
+
+            // Ignore mostly horizontal swipes
+
+            if (
+                Math.abs(deltaX) >
+                Math.abs(deltaY)
+            ) {
+                return;
+            }
+
+
+            // Minimum swipe distance
+
+            const swipeDistance = 50;
+
+
+            // ====================================
+            // SWIPE UP
+            // Page 1 → Page 2
+            // ====================================
+
+            if (
+                deltaY > swipeDistance &&
+                !pageTwoActive
+            ) {
+
+                enterPageTwo();
+
+                return;
+            }
+
+
+            // ====================================
+            // SWIPE DOWN
+            // Page 2 → Page 1
+            // ====================================
+
+            if (
+                deltaY < -swipeDistance &&
+                pageTwoActive
+            ) {
+
+                returnToPageOne();
+
+                return;
+            }
+
+        },
+        { passive: true }
     );
 
 
@@ -340,10 +454,16 @@
             if (transitioning) return;
 
 
-            const pageHeight = window.innerHeight;
+            const pageHeight =
+                window.innerHeight;
 
 
-            if (!pageTwoActive && window.scrollY !== 0) {
+            // Page 1
+
+            if (
+                !pageTwoActive &&
+                window.scrollY !== 0
+            ) {
 
                 window.scrollTo({
                     top: 0,
@@ -353,7 +473,12 @@
             }
 
 
-            if (pageTwoActive && window.scrollY !== pageHeight) {
+            // Page 2
+
+            if (
+                pageTwoActive &&
+                window.scrollY !== pageHeight
+            ) {
 
                 window.scrollTo({
                     top: pageHeight,

@@ -131,9 +131,6 @@
     const manyOriginLogo =
         document.querySelector(".logo-container img");
 
-    const enterManyOrigin =
-        document.getElementById("enter-manyorigin");
-
     const infoButton =
         document.getElementById("info-button");
 
@@ -146,31 +143,20 @@
 
 
     // ========================================
-    // INITIAL STATE
-    // ========================================
-
-    document.body.style.overflow = "hidden";
-
-
-    // ========================================
     // ENTER PAGE 2
     // ========================================
 
     function enterPageTwo(event) {
 
-        event.preventDefault();
-        event.stopPropagation();
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
 
         if (transitioning || pageTwoActive) return;
 
-
         transitioning = true;
         pageTwoActive = true;
-
-
-        // ManyOrigin logo disappears
-
-        manyOriginLogo.classList.add("hide");
 
 
         // ? disappears
@@ -178,58 +164,30 @@
         infoButton.classList.add("hide");
 
 
+        // ManyOrigin logo disappears
+
+        manyOriginLogo.classList.add("hide");
+
+
         // X appears
 
         closeButton.classList.add("show");
 
 
-        // Unlock scrolling
+        // EXACTLY ONE FULL PAGE
 
-        document.body.style.overflow = "auto";
+        window.scrollTo({
+            top: window.innerHeight,
+            behavior: "smooth"
+        });
 
-
-        // Scroll to Page 2
-
-        setTimeout(() => {
-
-            window.scrollTo({
-                top: window.innerHeight,
-                behavior: "smooth"
-            });
-
-        }, 300);
-
-
-        // Allow interaction again
 
         setTimeout(() => {
 
             transitioning = false;
 
-        }, 750);
-
+        }, 700);
     }
-
-
-    // ========================================
-    // MANYORIGIN LOGO
-    // ========================================
-
-    enterManyOrigin.addEventListener(
-        "click",
-        enterPageTwo
-    );
-
-
-    // ========================================
-    // QUESTION MARK
-    // EXACTLY THE SAME ACTION AS LOGO
-    // ========================================
-
-    infoButton.addEventListener(
-        "click",
-        enterPageTwo
-    );
 
 
     // ========================================
@@ -238,11 +196,12 @@
 
     function returnToPageOne(event) {
 
-        event.preventDefault();
-        event.stopPropagation();
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
 
         if (transitioning || !pageTwoActive) return;
-
 
         transitioning = true;
         pageTwoActive = false;
@@ -263,7 +222,7 @@
         manyOriginLogo.classList.remove("hide");
 
 
-        // Scroll back to Page 1
+        // EXACTLY ONE FULL PAGE BACK
 
         window.scrollTo({
             top: 0,
@@ -271,20 +230,38 @@
         });
 
 
-        // Lock Page 1 after transition
-
         setTimeout(() => {
 
-            document.body.style.overflow = "hidden";
             transitioning = false;
 
         }, 700);
-
     }
 
 
     // ========================================
-    // X BUTTON
+    // MANYORIGIN LOGO CLICK
+    // ========================================
+
+    document
+        .getElementById("enter-manyorigin")
+        .addEventListener(
+            "click",
+            enterPageTwo
+        );
+
+
+    // ========================================
+    // ? CLICK
+    // ========================================
+
+    infoButton.addEventListener(
+        "click",
+        enterPageTwo
+    );
+
+
+    // ========================================
+    // X CLICK
     // ========================================
 
     closeButton.addEventListener(
@@ -294,16 +271,21 @@
 
 
     // ========================================
-    // SCROLL CONTROL
+    // FULL-PAGE SCROLL CONTROL
     // ========================================
 
     window.addEventListener(
         "wheel",
         function (event) {
 
+            if (transitioning) {
+                event.preventDefault();
+                return;
+            }
+
 
             // ====================================
-            // PAGE 1
+            // PAGE 1 → PAGE 2
             // ====================================
 
             if (
@@ -313,29 +295,74 @@
 
                 event.preventDefault();
 
-                return;
+                enterPageTwo();
 
+                return;
             }
 
 
             // ====================================
-            // PAGE 2
+            // PAGE 2 → PAGE 1
             // ====================================
 
             if (
                 pageTwoActive &&
-                event.deltaY < 0 &&
-                !transitioning
+                event.deltaY < 0
             ) {
 
                 event.preventDefault();
 
-                returnToPageOne(event);
+                returnToPageOne();
 
+                return;
             }
+
+
+            // ====================================
+            // BLOCK ALL OTHER SCROLLING
+            // ====================================
+
+            event.preventDefault();
 
         },
         { passive: false }
+    );
+
+
+    // ========================================
+    // KEEP EXACTLY AT PAGE POSITIONS
+    // ========================================
+
+    window.addEventListener(
+        "scroll",
+        function () {
+
+            if (transitioning) return;
+
+
+            const pageHeight = window.innerHeight;
+
+
+            if (!pageTwoActive && window.scrollY !== 0) {
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "auto"
+                });
+
+            }
+
+
+            if (pageTwoActive && window.scrollY !== pageHeight) {
+
+                window.scrollTo({
+                    top: pageHeight,
+                    behavior: "auto"
+                });
+
+            }
+
+        }
     );
 
 </script>

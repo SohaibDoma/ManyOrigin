@@ -309,7 +309,9 @@ body {
     position: absolute;
 
     top: 30px;
-    left: 30px;
+    left: 50%;
+
+    transform: translateX(-50%);
 }
 
 .parent-wordmark img {
